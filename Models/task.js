@@ -10,6 +10,9 @@ const Task = sequelize.define("Task", {
         type: Sequelize.INTEGER,
         allowNull: false    
     },
+    endTime: {
+       type: Sequelize.BIGINT,
+    }
 });
 
 export default Task;
