@@ -10,7 +10,7 @@ router.get('/get', isAuthorized, async (req, res, next) => {
     try {
         const tasks = await Task.findAll({ where: { UserUsername: req.username }, order: [["id", "ASC"]] });
         tasks.map(task => {
-            returnedTasks.push({ id: task.dataValues.id, label: task.dataValues.label, priority: task.dataValues.priority });
+            returnedTasks.push({ id: task.dataValues.id, label: task.dataValues.label, priority: task.dataValues.priority, endTime: task.dataValues.endTime });
         })
         res.status(200).json(returnedTasks);
     } catch (error) {
@@ -19,11 +19,12 @@ router.get('/get', isAuthorized, async (req, res, next) => {
 })
 
 router.post('/create', isAuthorized, async (req, res, next) => {
-    const newTask = { label: req.body.label, priority: +req.body.priority, UserUsername: req.username };
+    const newTask = { label: req.body.label, priority: +req.body.priority, endTime: req.body.endTime.valueOf(), UserUsername: req.username };
     try {
-        await Task.create(newTask);
-        res.status(200).json("Task Created");
+        const createdTask = await Task.create(newTask);
+        res.status(200).json(createdTask);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error })
     }
 })
