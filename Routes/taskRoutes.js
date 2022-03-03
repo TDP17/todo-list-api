@@ -14,6 +14,7 @@ router.get('/get', isAuthorized, async (req, res, next) => {
         })
         res.status(200).json(returnedTasks);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error })
     }
 })
